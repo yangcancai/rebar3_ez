@@ -75,7 +75,9 @@ tar_ez([#{ebin_dir := _EbinDir,
                     [TarName, Fs, Fs1]),
 
     {ok, Repo} = file:get_cwd(),
-    ok = filelib:ensure_dir(PluginsDir),
+    ok =
+        filelib:ensure_dir(
+            filename:join(PluginsDir, TarName)),
     ok = file:set_cwd(OutDir),
     {ok, _} = zip:create(TarName, Fs1),
     ok = file:set_cwd(Repo),
