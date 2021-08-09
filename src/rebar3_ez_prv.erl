@@ -26,6 +26,7 @@ init(State) ->
 
 -spec do(rebar_state:t()) -> {ok, rebar_state:t()} | {error, string()}.
 do(State) ->
+    rebar_api:info("Compiling rebar3_ez files...", []),
     %% all deps
     DepsL = rebar_state:all_deps(State),
     %% proj apps
@@ -61,7 +62,8 @@ tar_ez([#{ebin_dir := _EbinDir,
     Fs1 = exits_fs(OutDir, Fs),
     rebar_api:debug("rebar3_ez tar_ez ==> ez_file_name: ~p, list_file: ~p, list_file1: ~p",
                     [TarName, Fs, Fs1]),
-
+    From = filename:join(OutDir, TarName),
+    To = filename:join(PluginsDir, TarName),
     {ok, Repo} = file:get_cwd(),
     ok =
         filelib:ensure_dir(
@@ -69,11 +71,8 @@ tar_ez([#{ebin_dir := _EbinDir,
     ok = file:set_cwd(OutDir),
     {ok, _} = zip:create(TarName, Fs1),
     ok = file:set_cwd(Repo),
-    rebar_api:debug("mov ~p to ~p",
-                    [filename:join(OutDir, TarName), filename:join(PluginsDir, TarName)]),
-    ok =
-        file:rename(
-            filename:join(OutDir, TarName), filename:join(PluginsDir, TarName)),
+    rebar_api:info("Move ez file: ~p to ~p", [From, To]),
+    ok = file:rename(From, To),
     tar_ez(Rest, PluginsDir, State).
 
 make_tar_name(Name, Vsn) ->

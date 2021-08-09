@@ -47,6 +47,7 @@ init(State) ->
 
 -spec do(rebar_state:t()) -> {ok, rebar_state:t()} | {error, string()}.
 do(State) ->
+    rebar_api:info("Cleaning compiled rebar3_ez files...", []),
     PluginsDir = rebar3_ez_prv:plugins_dir(State),
     clean(PluginsDir),
     {ok, State}.
@@ -60,6 +61,7 @@ clean(Dir) ->
         false ->
             ok;
         true ->
+            rebar_api:info("Deleteing rebar3_ez files ...", []),
             Files = [filename:join(Dir, File) || File <- filelib:wildcard("*", Dir)],
             delete_file(Files)
     end.
@@ -67,6 +69,7 @@ clean(Dir) ->
 delete_file([]) ->
     ok;
 delete_file([File | Rest]) ->
+    rebar_api:info("Deleteing rebar3_ez file: ", [File]),
     case filelib:is_dir(File) of
         true ->
             case prim_file:list_dir(File) of
