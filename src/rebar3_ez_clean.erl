@@ -69,7 +69,7 @@ clean(Dir) ->
 delete_file([]) ->
     ok;
 delete_file([File | Rest]) ->
-    rebar_api:info("Deleteing rebar3_ez file: ", [File]),
+    rebar_api:info("Deleteing rebar3_ez file: ~p", [File]),
     case filelib:is_dir(File) of
         true ->
             case prim_file:list_dir(File) of
