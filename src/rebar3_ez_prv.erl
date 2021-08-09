@@ -80,4 +80,11 @@ make_tar_name(PluginsDir, Name, Vsn) ->
     filename:join(PluginsDir, lists:concat([Name, "-", Vsn, ".ez"])).
 
 exits_fs(Fs) ->
-    [F || F <- Fs, filelib:is_dir(F)].
+    lists:flatten([case filelib:is_dir(F) of
+                       true ->
+                           F;
+                       false ->
+                           rebar_api:debug("File = ~p", [F]),
+                           []
+                   end
+                   || F <- Fs]).
