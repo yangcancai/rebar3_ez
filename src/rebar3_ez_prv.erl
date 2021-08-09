@@ -27,12 +27,8 @@ init(State) ->
 -spec do(rebar_state:t()) -> {ok, rebar_state:t()} | {error, string()}.
 do(State) ->
     rebar_api:info("Compiling rebar3_ez files...", []),
-    %% all deps
-    DepsL = rebar_state:all_deps(State),
-    %% proj apps
-    ProjL = rebar_state:project_apps(State),
     PluginsDir = plugins_dir(State),
-    tar_ez([rebar_app_info:app_to_map(App) || App <- DepsL ++ ProjL], PluginsDir, State),
+    tar_ez([rebar_app_info:app_to_map(App) || App <- apps(State)], PluginsDir, State),
     {ok, State}.
 
 -spec format_error(any()) -> iolist().
@@ -81,3 +77,13 @@ exits_fs(OutDir, Fs) ->
      || F <- Fs,
         filelib:is_dir(
             filename:join(OutDir, F))].
+
+apps(State) ->
+    Apps =
+        case rebar_state:current_app(State) of
+            undefined ->
+                rebar_state:project_apps(State);
+            AppInfo ->
+                [AppInfo]
+        end,
+    Apps ++ rebar_state:all_deps(State).
