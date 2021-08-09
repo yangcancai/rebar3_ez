@@ -3,7 +3,7 @@
 -export([init/1, do/1, format_error/1, plugins_dir/1]).
 
 -define(PROVIDER, compile).
--define(DEPS, [default, app_discovery]).
+-define(DEPS, []).
 
 %% ===================================================================
 %% Public API

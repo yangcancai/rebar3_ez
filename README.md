@@ -20,7 +20,7 @@ Add the plugin to your rebar config:
 Then just call your plugin directly in an existing application:
 
 
-    $ rebar3 rebar3_ez
+    $ rebar3 ez
     ===> Fetching rebar3_ez
     ===> Compiling rebar3_ez
     <Plugin Output>
