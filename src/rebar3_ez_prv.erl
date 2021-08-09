@@ -77,6 +77,7 @@ tar_ez([#{ebin_dir := _EbinDir,
     {ok, Repo} = file:get_cwd(),
     ok = file:set_cwd(OutDir),
     {ok, _} = zip:create(TarName, Fs1),
+    ok = filelib:ensure_dir(PluginsDir),
     rebar_api:debug("mov ~p to ~p", [TarName, filename:join(PluginsDir, TarName)]),
     ok =
         file:rename(
