@@ -64,7 +64,7 @@ setup_rebar_config_content(Repo, Branch) ->
                 Branch ++
                     "\"}}}\n]}.\n{provider_hooks, [\n\t{pre, [\n\t\t{clean, {ez, "
                     "clean}},\n\t\t{compile, {ez, compile}}\n\t]}\n]}.\n\t\t{ez_opts,[{pl"
-                    "ugins, \"plugins\"}]}.\n".
+                    "ugins_dir, \"plugins\"}]}.\n".
 
 test_compile() ->
     {ok, Repo} = file:get_cwd(),
