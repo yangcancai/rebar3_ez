@@ -73,7 +73,11 @@ tar_ez([#{ebin_dir := _EbinDir,
     Fs1 = exits_fs(OutDir, Fs),
     rebar_api:debug("rebar3_ez tar_ez ==> ez_file_name: ~p, list_file: ~p, list_file1: ~p",
                     [TarName, Fs, Fs1]),
+
+    {ok, Repo} = file:get_cwd(),
+    ok = file:set_cwd(OutDir),
     {ok, _} = zip:create(TarName, Fs1),
+    ok = file:set_cwd(Repo),
     tar_ez(Rest, PluginsDir, State).
 
 make_tar_name(Name, Vsn) ->
