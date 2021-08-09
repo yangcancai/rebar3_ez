@@ -1,0 +1,14 @@
+{application, rebar3_ez,
+ [{description, "A rebar3 plugin for dist app to  *.ez"},
+  {vsn, "0.1.0"},
+  {registered, []},
+  {applications,
+   [kernel,
+    stdlib
+   ]},
+  {env,[]},
+  {modules, []},
+
+  {licenses, ["Apache 2.0"]},
+  {links, []}
+ ]}.
