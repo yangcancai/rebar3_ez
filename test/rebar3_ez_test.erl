@@ -64,9 +64,8 @@ setup_rebar_config_content(Repo, Branch) ->
                 Branch ++
                     "\"}}}\n]}.\n{provider_hooks, [\n\t{post, [\n\t\t{clean, {ez, "
                     "clean}},\n\t\t{compile, {ez, compile}}\n\t]}\n]}.\n{ez_opts,[{plugin"
-                    "s_dir, \"plugins\"}]}.\n{deps,[jiffy]}.".
-
-                    % "s_dir, \"plugins\"}]}.\n{deps,[{cowboy,\"2.9.0\"}]}.".
+                    "s_dir, \"plugins\"}]}.\n{deps,[{jiffy,\"1.0.8\"},{cowboy, \"2.9.0\"}"
+                    "]}.".
 
 test_compile() ->
     {ok, Repo} = file:get_cwd(),
@@ -87,6 +86,19 @@ test_compile() ->
     true =
         filelib:is_regular(
             filename:join("plugins", "ez_example-1.0.ez")),
+    true =
+        filelib:is_regular(
+            filename:join("plugins", "xmerl-1.3.24.ez")),
+    true =
+        filelib:is_regular(
+            filename:join("plugins", "jiffy-1.0.8.ez")),
+
+    true =
+        filelib:is_regular(
+            filename:join("plugins", "crypto-4.6.5.ez")),
+    true =
+        filelib:is_regular(
+            filename:join("plugins", "ssl-9.6.2.ez")),
 
     file:set_cwd(Repo).
 
