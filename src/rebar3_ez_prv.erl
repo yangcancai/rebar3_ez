@@ -101,7 +101,8 @@ find_std_apps(MissApps) ->
 find_std_apps(App, Acc) ->
     [AppDir] =
         filelib:wildcard(
-            lists:concat([code:lib_dir(), App, "*"])),
+            filename:join(
+                code:lib_dir(), lists:concat([App, "*"]))),
     {ok, [{application, App, Opts}]} =
         file:consult(
             filename:join(AppDir, filename:join("ebin", lists:concat([App, ".app"])))),
