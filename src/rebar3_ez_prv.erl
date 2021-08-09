@@ -59,7 +59,7 @@ plugins_dir(State) ->
 
 tar_ez([], _, _) ->
     ok;
-tar_ez([#{ebin_dir := EbinDir,
+tar_ez([#{ebin_dir := _EbinDir,
           out_dir := OutDir,
           name := Name,
           vsn := Vsn} =
@@ -68,16 +68,20 @@ tar_ez([#{ebin_dir := EbinDir,
        PluginsDir,
        State) ->
     %%
-    TarName = make_tar_name(PluginsDir, Name, Vsn),
-    Fs = [EbinDir, filename:join(OutDir, "include"), filename:join(OutDir, "priv")],
-    Fs1 = exits_fs(Fs),
+    TarName = make_tar_name(Name, Vsn),
+    Fs = ["ebin", "include", "priv"],
+    Fs1 = exits_fs(OutDir, Fs),
     rebar_api:debug("rebar3_ez tar_ez ==> ez_file_name: ~p, list_file: ~p, list_file1: ~p",
                     [TarName, Fs, Fs1]),
     {ok, _} = zip:create(TarName, Fs1),
     tar_ez(Rest, PluginsDir, State).
 
-make_tar_name(PluginsDir, Name, Vsn) ->
-    filename:join(PluginsDir, lists:concat([Name, "-", Vsn, ".ez"])).
+make_tar_name(Name, Vsn) ->
+    filename:join(
+        lists:concat([Name, "-", Vsn, ".ez"])).
 
-exits_fs(Fs) ->
-    [F || F <- Fs, filelib:is_dir(F)].
+exits_fs(OutDir, Fs) ->
+    [F
+     || F <- Fs,
+        filelib:is_dir(
+            filename:join(OutDir, F))].
