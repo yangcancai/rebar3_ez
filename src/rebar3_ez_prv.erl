@@ -30,8 +30,8 @@ do(State) ->
     DepsL = rebar_state:all_deps(State),
     %% proj apps
     ProjL = rebar_state:project_apps(State),
-    rebar_api:debug("all_deps: ~p~n", [[rebar_app_info:app_to_map(App) || App <- DepsL]]),
-    rebar_api:debug("project_apps: ~p~n", [[rebar_app_info:app_to_map(App) || App <- ProjL]]),
+    % rebar_api:debug("all_deps: ~p~n", [[rebar_app_info:app_to_map(App) || App <- DepsL]]),
+    % rebar_api:debug("project_apps: ~p~n", [[rebar_app_info:app_to_map(App) || App <- ProjL]]),
     % ===> project_apps: [#{applications => [kernel,stdlib],
     %                          dir =>
     %                              "/Users/admin/proj/erlang/rebar3_diameter_compiler/_build/test/lib/rebar3_diameter_compiler/test/compile/_build/prod/lib/compile",
@@ -43,7 +43,7 @@ do(State) ->
     %                              "/Users/admin/proj/erlang/rebar3_diameter_compiler/_build/test/lib/rebar3_diameter_compiler/test/compile/_build/prod/lib/compile",
     %                          vsn => "1.0"}]
     PluginsDir = plugins_dir(State),
-    % tar_ez(DepsL ++ ProjL, PluginsDir, State),
+    tar_ez([rebar_app_info:app_to_map(App) || App <- DepsL ++ ProjL], PluginsDir, State),
     {ok, State}.
 
 -spec format_error(any()) -> iolist().
