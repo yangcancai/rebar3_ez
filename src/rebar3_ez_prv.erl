@@ -96,12 +96,17 @@ apps(State) ->
     Apps ++ rebar_state:all_deps(State).
 
 find_std_apps(MissApps) ->
-    lists:foldl(fun find_std_app/2, [], MissApps).
+    lists:foldl(fun find_std_apps/2, [], MissApps).
 
 find_std_apps(App, Acc) ->
-    [AppDir] = filelib:wildcard(lists:concat([code:lib_dir(), App, "*"]),
-    {ok, [{application, 
-    App, Opts}]} = file:consult(filename:join(AppDir, filename:join("ebin",lists:concat([App,".app"])))),
+    [AppDir] =
+        filelib:wildcard(
+            lists:concat([code:lib_dir(), App, "*"])),
+    {ok, [{application, App, Opts}]} =
+        file:consult(
+            filename:join(AppDir, filename:join("ebin", lists:concat([App, ".app"])))),
     Vsn = proplists:get_value(vsn, Opts),
-    [#{out_dir => AppDir, name => App, vsn => Vsn} | Acc].
-
+    [#{out_dir => AppDir,
+       name => App,
+       vsn => Vsn}
+     | Acc].
