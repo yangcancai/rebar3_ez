@@ -12,7 +12,7 @@
 -include_lib("eunit/include/eunit.hrl").
 
 compile_test_() ->
-    {setup, fun() -> setup() end, [fun() -> test_compile() end]}.
+    {setup, fun() -> setup() end, {timeout, 60, [fun() -> test_compile() end]}}.
 
 %% Internal
 
@@ -63,22 +63,29 @@ setup_rebar_config_content(Repo, Branch) ->
             "\", {branch, \"" ++
                 Branch ++
                     "\"}}}\n]}.\n{provider_hooks, [\n\t{post, [\n\t\t{clean, {ez, "
-                    "clean}},\n\t\t{compile, {ez, compile}}\n\t]}\n]}.\n\t\t{ez_opts,[{pl"
-                    "ugins_dir, \"plugins\"}]}.\n".
+                    "clean}},\n\t\t{compile, {ez, compile}}\n\t]}\n]}.\n{ez_opts,[{plugin"
+                    "s_dir, \"plugins\"}]}.\n{deps,[{cowboy,\"2.9.0\"}]}.".
 
 test_compile() ->
     {ok, Repo} = file:get_cwd(),
     Test_target = test_target(Repo),
     ok = file:set_cwd(Test_target),
-    Result = os:cmd("DIAGNOSTIC=1 rebar3 eunit"),
-    ?debugMsg(Result),
-    % ?assertCmd("rebar3 eunit"),
-    % true =
-    % filelib:is_regular(
-    % filename:join("include", diameter_basename() ++ ".hrl")),
-    % true =
-    % filelib:is_regular(
-    % filename:join("src", diameter_basename() ++ ".erl")),
+    % Result = os:cmd("DIAGNOSTIC=1 rebar3 eunit"),
+    % ?debugMsg(Result),
+    ?assertCmd("rebar3 eunit"),
+    true =
+        filelib:is_regular(
+            filename:join("plugins", "cowboy-2.9.0.ez")),
+    true =
+        filelib:is_regular(
+            filename:join("plugins", "cowlib-2.11.0.ez")),
+    true =
+        filelib:is_regular(
+            filename:join("plugins", "ranch-1.8.0.ez")),
+    true =
+        filelib:is_regular(
+            filename:join("plugins", "ez_example-1.0.ez")),
+
     file:set_cwd(Repo).
 
 test_target(Repo) ->
