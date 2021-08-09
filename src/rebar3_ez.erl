@@ -23,7 +23,10 @@ find_missing_apps(PluginsDir) ->
     lists:foldl(fun find_missing_apps/2, {[], Plugins}, Plugins).
 
 find_missing_apps(#plugin{extra_applications = ExtraApps}, {Acc, Plugins}) ->
-    {[App || App <- ExtraApps, not lists:keymember(App, #plugin.name, Plugins)] ++ Acc,
+    {[App
+      || App <- ExtraApps,
+         not lists:keymember(App, #plugin.name, Plugins) andalso not lists:member(App, Acc)]
+         ++ Acc,
      Plugins}.
 
 list_plugins(PluginsDir) ->
