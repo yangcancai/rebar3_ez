@@ -43,7 +43,7 @@ do(State) ->
     %                              "/Users/admin/proj/erlang/rebar3_diameter_compiler/_build/test/lib/rebar3_diameter_compiler/test/compile/_build/prod/lib/compile",
     %                          vsn => "1.0"}]
     PluginsDir = plugins_dir(State),
-    tar_ez(DepsL ++ ProjL, PluginsDir, State),
+    % tar_ez(DepsL ++ ProjL, PluginsDir, State),
     {ok, State}.
 
 -spec format_error(any()) -> iolist().
