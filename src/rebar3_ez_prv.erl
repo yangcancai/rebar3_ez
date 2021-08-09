@@ -71,7 +71,7 @@ tar_ez([#{ebin_dir := EbinDir,
     TarName = make_tar_name(PluginsDir, Name, Vsn),
     Fs = [EbinDir, filename:join(OutDir, "include"), filename:join(OutDir, "priv")],
     Fs1 = exits_fs(Fs),
-    rebar_api:debug("rebar3_ez tar_ez ==> ez_file_name: ~p, list_file: ~p",
+    rebar_api:debug("rebar3_ez tar_ez ==> ez_file_name: ~p, list_file: ~p, list_file1: ~p",
                     [TarName, Fs, Fs1]),
     {ok, _} = zip:create(TarName, Fs1),
     tar_ez(Rest, PluginsDir, State).
