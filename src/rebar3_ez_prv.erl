@@ -84,7 +84,7 @@ exits_fs(Fs) ->
                        true ->
                            F;
                        false ->
-                           rebar_api:debug("File = ~p", [F]),
+                           rebar_api:debug("File = ~p, ~p", [F, filelib:wildcard("*", F)]),
                            []
                    end
                    || F <- Fs]).
