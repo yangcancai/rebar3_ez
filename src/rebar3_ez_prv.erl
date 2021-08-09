@@ -77,8 +77,7 @@ tar_ez([#{ebin_dir := _EbinDir,
     tar_ez(Rest, PluginsDir, State).
 
 make_tar_name(Name, Vsn) ->
-    filename:join(
-        lists:concat([Name, "-", Vsn, ".ez"])).
+    lists:concat([Name, "-", Vsn, ".ez"]).
 
 exits_fs(OutDir, Fs) ->
     [F
