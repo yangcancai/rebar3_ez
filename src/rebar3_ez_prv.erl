@@ -27,9 +27,16 @@ init(State) ->
 -spec do(rebar_state:t()) -> {ok, rebar_state:t()} | {error, string()}.
 do(State) ->
     rebar_api:info("Compiling rebar3_ez files...", []),
-    PluginsDir = plugins_dir(State),
-    tar_ez([rebar_app_info:app_to_map(App) || App <- apps(State)], PluginsDir, State),
-    {ok, State}.
+    {ok, State1} = rebar3_ez_clean:do(State),
+    PluginsDir = plugins_dir(State1),
+    ok = tar_ez([rebar_app_info:app_to_map(App) || App <- apps(State)], PluginsDir, State1),
+    case rebar3_ez:find_missing_apps(plugins_dir(State)) of
+        [] ->
+            ok;
+        MissApps ->
+            rebar_api:error("Missing deps ~p", [MissApps])
+    end,
+    {ok, State1}.
 
 -spec format_error(any()) -> iolist().
 format_error(Reason) ->
