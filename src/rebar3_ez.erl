@@ -61,7 +61,8 @@ app_deps_info(Name, Props, PluginDesc) ->
             desc = Description,
             location = PluginDesc,
             applications = Dependencies,
-            extra_applications = Dependencies}.
+            extra_applications =
+                [App || App <- Dependencies, not lists:member(App, [kernel, stdlib])]}.
 
 parse_binary(Bin) ->
     try
