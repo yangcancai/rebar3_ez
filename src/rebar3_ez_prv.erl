@@ -62,16 +62,14 @@ tar_ez([#{ebin_dir := _EbinDir,
     Fs1 = exits_fs(OutDir, Fs),
     rebar_api:debug("rebar3_ez tar_ez ==> ez_file_name: ~p, list_file: ~p, list_file1: ~p",
                     [TarName, Fs, Fs1]),
-    From = filename:join(OutDir, TarName),
-    To = filename:join(PluginsDir, TarName),
     {ok, Repo} = file:get_cwd(),
-    ok =
-        filelib:ensure_dir(
-            filename:join(PluginsDir, TarName)),
+    From = filename:join(OutDir, TarName),
+    To = filename:join(Repo, PluginsDir, TarName),
+    ok = filelib:ensure_dir(To),
     ok = file:set_cwd(OutDir),
     {ok, _} = zip:create(TarName, Fs1),
     ok = file:set_cwd(Repo),
-    rebar_api:info("Move ez file: ~p to ~p", [From, To]),
+    rebar_api:info("Generating ez file: ~p", [To]),
     ok = file:rename(From, To),
     tar_ez(Rest, PluginsDir, State).
 
