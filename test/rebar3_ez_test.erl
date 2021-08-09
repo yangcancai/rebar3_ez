@@ -62,7 +62,7 @@ setup_rebar_config_content(Repo, Branch) ->
         Repo ++
             "\", {branch, \"" ++
                 Branch ++
-                    "\"}}}\n]}.\n{provider_hooks, [\n\t{pre, [\n\t\t{clean, {ez, "
+                    "\"}}}\n]}.\n{provider_hooks, [\n\t{post, [\n\t\t{clean, {ez, "
                     "clean}},\n\t\t{compile, {ez, compile}}\n\t]}\n]}.\n\t\t{ez_opts,[{pl"
                     "ugins_dir, \"plugins\"}]}.\n".
 
