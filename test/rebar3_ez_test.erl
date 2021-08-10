@@ -101,7 +101,7 @@ test_compile() ->
             filename:join("plugins", "ssl-9.6.2.ez")),
     true =
         filelib:is_regular(
-            filename:join("plugins", "ans1-5.0.12.ez")),
+            filename:join("plugins", "asn1-5.0.12.ez")),
     true =
         filelib:is_regular(
             filename:join("plugins", "gun-1.3.0.ez")),
