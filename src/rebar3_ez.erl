@@ -13,6 +13,8 @@
          applications = [] :: list(), %% 依赖
          extra_applications = [] :: list()}). %% 系统未加载的依赖
 
+-define(EXINCLUDE_STD_LIBS, [kernel, stdlib]).
+
 -spec init(rebar_state:t()) -> {ok, rebar_state:t()}.
 init(State) ->
     {ok, State1} = rebar3_ez_prv:init(State),
@@ -46,7 +48,9 @@ find_std_deps([App | Rest], Acc) ->
             filename:join(AppDir, filename:join("ebin", lists:concat([App, ".app"])))),
 
     Deps =
-        [Dep || Dep <- proplists:get_value(applications, Opts, []), not lists:member(Dep, Acc)],
+        [Dep
+         || Dep <- proplists:get_value(applications, Opts, []),
+            not lists:member(Dep, Acc) andalso not lists:member(Dep, ?EXINCLUDE_STD_LIBS)],
     find_std_deps(Rest ++ Deps, Acc ++ Deps).
 
 list_plugins(PluginsDir) ->
@@ -82,7 +86,7 @@ app_deps_info(Name, Props, PluginDesc) ->
             location = PluginDesc,
             applications = Dependencies,
             extra_applications =
-                [App || App <- Dependencies, not lists:member(App, [kernel, stdlib])]}.
+                [App || App <- Dependencies, not lists:member(App, ?EXINCLUDE_STD_LIBS)]}.
 
 parse_binary(Bin) ->
     try

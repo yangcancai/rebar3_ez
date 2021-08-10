@@ -99,6 +99,24 @@ test_compile() ->
     true =
         filelib:is_regular(
             filename:join("plugins", "ssl-9.6.2.ez")),
+    true =
+        filelib:is_regular(
+            filename:join("plugins", "ans1-5.0.12.ez")),
+    true =
+        filelib:is_regular(
+            filename:join("plugins", "gun-1.3.0.ez")),
+
+    true =
+        filelib:is_regular(
+            filename:join("plugins", "public_key-1.7.2.ez")),
+
+    false =
+        filelib:is_regular(
+            filename:join("plugins", "kernel-6.5.2.1.ez")),
+
+    false =
+        filelib:is_regular(
+            filename:join("plugins", "stdlib-3.12.1.ez")),
 
     file:set_cwd(Repo).
 
