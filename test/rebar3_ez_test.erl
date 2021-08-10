@@ -64,8 +64,8 @@ setup_rebar_config_content(Repo, Branch) ->
                 Branch ++
                     "\"}}}\n]}.\n{provider_hooks, [\n\t{post, [\n\t\t{clean, {ez, "
                     "clean}},\n\t\t{compile, {ez, compile}}\n\t]}\n]}.\n{ez_opts,[{plugin"
-                    "s_dir, \"plugins\"}]}.\n{deps,[{jiffy,\"1.0.8\"},{cowboy, \"2.9.0\"}"
-                    "]}.".
+                    "s_dir, \"plugins\"}]}.\n{deps,[{jiffy,\"1.0.8\"},\n{cowboy, "
+                    "\"2.9.0\"},\n{gun,\"1.3.0\"}]}.".
 
 test_compile() ->
     {ok, Repo} = file:get_cwd(),

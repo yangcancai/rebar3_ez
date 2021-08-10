@@ -20,7 +20,9 @@ init(State) ->
 
 find_missing_apps(PluginsDir) ->
     Plugins = list_plugins(PluginsDir),
-    lists:foldl(fun find_missing_apps/2, {[], Plugins}, Plugins).
+    {StdDeps, _} = lists:foldl(fun find_missing_apps/2, {[], Plugins}, Plugins),
+    %% find deps for std lib
+    {find_std_deps(StdDeps), Plugins}.
 
 find_missing_apps(#plugin{extra_applications = ExtraApps}, {Acc, Plugins}) ->
     {[App
@@ -28,6 +30,24 @@ find_missing_apps(#plugin{extra_applications = ExtraApps}, {Acc, Plugins}) ->
          not lists:keymember(App, #plugin.name, Plugins) andalso not lists:member(App, Acc)]
          ++ Acc,
      Plugins}.
+
+find_std_deps(StdDeps) ->
+    find_std_deps(StdDeps, StdDeps).
+
+find_std_deps([], Acc) ->
+    Acc;
+find_std_deps([App | Rest], Acc) ->
+    [AppDir] =
+        filelib:wildcard(
+            filename:join(
+                code:lib_dir(), lists:concat([App, "*"]))),
+    {ok, [{application, App, Opts}]} =
+        file:consult(
+            filename:join(AppDir, filename:join("ebin", lists:concat([App, ".app"])))),
+
+    Deps =
+        [Dep || Dep <- proplists:get_value(applications, Opts, []), not lists:member(Dep, Acc)],
+    find_std_deps(Rest ++ Deps, Acc ++ Deps).
 
 list_plugins(PluginsDir) ->
     Files = [filename:join(PluginsDir, File) || File <- filelib:wildcard("*.ez", PluginsDir)],
