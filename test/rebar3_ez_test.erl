@@ -71,9 +71,9 @@ test_compile() ->
     {ok, Repo} = file:get_cwd(),
     Test_target = test_target(Repo),
     ok = file:set_cwd(Test_target),
-    % Result = os:cmd("DIAGNOSTIC=1 rebar3 eunit"),
-    % ?debugMsg(Result),
-    ?assertCmd("rebar3 eunit"),
+    Result = os:cmd("DIAGNOSTIC=1 rebar3 eunit"),
+    ?debugMsg(Result),
+    % ?assertCmd("rebar3 eunit"),
     true =
         filelib:is_regular(
             filename:join("plugins", "cowboy-2.9.0.ez")),

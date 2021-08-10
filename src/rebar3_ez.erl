@@ -50,7 +50,7 @@ find_std_deps([App | Rest], Acc, State) ->
         [Dep
          || Dep <- proplists:get_value(applications, Opts, []),
             not lists:member(Dep, Acc) andalso not lists:member(Dep, ?EXINCLUDE_STD_LIBS)],
-    find_std_deps(Rest ++ Deps, Acc ++ Deps).
+    find_std_deps(Rest ++ Deps, Acc ++ Deps, State).
 
 list_plugins(PluginsDir) ->
     Files = [filename:join(PluginsDir, File) || File <- filelib:wildcard("*.ez", PluginsDir)],
