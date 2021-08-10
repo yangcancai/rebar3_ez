@@ -30,12 +30,12 @@ do(State) ->
     {ok, State1} = rebar3_ez_clean:do(State),
     PluginsDir = plugins_dir(State1),
     ok = tar_ez([rebar_app_info:app_to_map(App) || App <- apps(State)], PluginsDir, State1),
-    case rebar3_ez:find_missing_apps(plugins_dir(State)) of
+    case rebar3_ez:find_missing_apps(plugins_dir(State), State) of
         [] ->
             ok;
         {MissApps, Plugins} ->
             rebar_api:debug("Missing deps ~p, plugins ~p", [MissApps, Plugins]),
-            ok = tar_ez(find_std_apps(MissApps), PluginsDir, State1)
+            ok = tar_ez(find_std_apps(MissApps, State1), PluginsDir, State1)
     end,
     {ok, State1}.
 
@@ -95,19 +95,21 @@ apps(State) ->
         end,
     Apps ++ rebar_state:all_deps(State).
 
-find_std_apps(MissApps) ->
-    lists:foldl(fun find_std_apps/2, [], MissApps).
+find_std_apps(MissApps, State) ->
+    {Rs, _} = lists:foldl(fun do_find_std_apps/2, {[], State}, MissApps),
+    Rs.
 
-find_std_apps(App, Acc) ->
+do_find_std_apps(App, {Acc, State}) ->
     [AppDir] =
         filelib:wildcard(
             filename:join(
-                code:lib_dir(), lists:concat([App, "*"]))),
+                rebar3_ez:lib_dir(State), lists:concat([App, "*"]))),
     {ok, [{application, App, Opts}]} =
         file:consult(
             filename:join(AppDir, filename:join("ebin", lists:concat([App, ".app"])))),
     Vsn = proplists:get_value(vsn, Opts),
-    [#{out_dir => AppDir,
-       name => App,
-       vsn => Vsn}
-     | Acc].
+    {[#{out_dir => AppDir,
+        name => App,
+        vsn => Vsn}
+      | Acc],
+     State}.
